@@ -14,8 +14,7 @@
 		<h1>Data Analysis POC</h1>
 		<h2>Step 2: Select columns for processing</h2>
 
-		<c:url var="actionUrl" value="selectColumns?${_csrf.parameterName}=${_csrf.token}"/>
-		<form id="fileuploadForm" action="${contextPath}/selectColumns?${_csrf.parameterName}=${_csrf.token}" method="POST" enctype="multipart/form-data" class="cleanform">
+		<form action="${contextPath}/createReport?${_csrf.parameterName}=${_csrf.token}" method="POST" class="cleanform">
 			<div class="header">
 		  		<c:if test="${not empty message}">
 					<div id="message" class="success">${message}</div>	  		
@@ -28,7 +27,7 @@
                         <input type="checkbox" id="${table.name}" name="${table.name}" style="display:inline" onclick="toggleTable('${table.name}');" />&nbsp;<strong><c:out value="${table.name}" /></strong>
                         <br/>
                         <c:forEach items="${table.columns}" var="column">
-                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="${table.name}|${column.name}" name="${table.name}|${column.name}" style="display:inline" />&nbsp;<c:out value="${column.name}" />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="${table.name}|${column.name}" name="DATA_${table.name}|${column.name}" style="display:inline" />&nbsp;<c:out value="${column.name}" />
                             <br/>
                         </c:forEach>
                     </p>

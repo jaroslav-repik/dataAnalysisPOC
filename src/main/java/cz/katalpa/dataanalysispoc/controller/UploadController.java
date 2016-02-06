@@ -3,6 +3,7 @@ package cz.katalpa.dataanalysispoc.controller;
 import cz.katalpa.dataanalysispoc.model.Column;
 import cz.katalpa.dataanalysispoc.model.Table;
 import cz.katalpa.dataanalysispoc.model.Template;
+import cz.katalpa.dataanalysispoc.utils.ExcelUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -61,31 +62,10 @@ public class UploadController {
                     for (int j = row.getFirstCellNum(); j< row.getLastCellNum(); j++) {
                         try {
                             Cell cell = row.getCell(j);
-                            if (cell == null) {
+                            String cellValue = ExcelUtils.getCellValue(cell);
+                            if (cellValue == null) {
                                 continue;
                             }
-                            String cellValue = "";
-                            switch (cell.getCellType()) {
-                                case Cell.CELL_TYPE_BOOLEAN:
-                                    cellValue = String.valueOf(cell.getBooleanCellValue());
-                                    break;
-                                case Cell.CELL_TYPE_NUMERIC:
-                                    cellValue = String.valueOf(cell.getNumericCellValue());
-                                    break;
-                                case Cell.CELL_TYPE_STRING:
-                                    cellValue = String.valueOf(cell.getStringCellValue());
-                                    break;
-                                case Cell.CELL_TYPE_BLANK:
-                                    break;
-                                case Cell.CELL_TYPE_ERROR:
-                                    cellValue = String.valueOf(cell.getErrorCellValue());
-                                    break;
-
-                                // CELL_TYPE_FORMULA will never occur
-                                case Cell.CELL_TYPE_FORMULA:
-                                    break;
-                            }
-
                             Column column = new Column();
                             column.setName(cellValue);
                             columns.add(column);

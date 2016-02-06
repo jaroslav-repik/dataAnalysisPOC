@@ -12,6 +12,8 @@ public class Column implements Serializable {
     static final long serialVersionUID = 1L;
     private String name;
     private boolean selected;
+    private long recordsTotal;
+    private long recordsUnique;
 
     public String getName() {
         return name;
@@ -27,5 +29,20 @@ public class Column implements Serializable {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public long getRecordsTotal() {
+        return recordsTotal;
+    }
+    public void setRecordsTotal(long recordsTotal) {
+        this.recordsTotal = recordsTotal;
+    }
+
+    public long getRecordsUnique() {
+        return recordsUnique;
+    }
+
+    public void setRecordsUnique(long recordsUnique) {
+        this.recordsUnique = recordsUnique;
     }
 }
