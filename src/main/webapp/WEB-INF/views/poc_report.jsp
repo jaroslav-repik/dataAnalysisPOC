@@ -37,6 +37,15 @@
 		</form>
 
 	</div>
+	<hr />
+	<br />
+	<small>Server processing time: ${timePassed} ms</small>
+	<br/>
+	<small>Total memory: ${totalMemory}</small>
+	<br/>
+	<small>Free memory: ${freeMemory}</small>
+	<br/>
+	<small>Used memory: ${usedMemory}</small>
 
 
 <c:if test="${!ajaxRequest}">

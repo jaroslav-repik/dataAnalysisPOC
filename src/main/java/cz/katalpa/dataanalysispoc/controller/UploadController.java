@@ -5,16 +5,11 @@ import cz.katalpa.dataanalysispoc.model.Table;
 import cz.katalpa.dataanalysispoc.model.Template;
 import cz.katalpa.dataanalysispoc.utils.ExcelUtils;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.mvc.extensions.ajax.AjaxUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +21,6 @@ import java.util.List;
 @RequestMapping("/upload")
 public class UploadController {
 
-	@ModelAttribute
-	public void ajaxAttribute(WebRequest request, Model model) {
-		model.addAttribute("ajaxRequest", AjaxUtils.isAjaxRequest(request));
-	}
 
 	@RequestMapping(method=RequestMethod.GET)
 	public void fileUploadForm() {
@@ -38,6 +29,8 @@ public class UploadController {
 	@RequestMapping(method=RequestMethod.POST)
 	public String processUpload(@RequestParam MultipartFile file, Model model, HttpServletRequest request) throws IOException {
 		//model.addAttribute("message", "File '" + file.getOriginalFilename() + "' uploaded successfully");
+
+        long start = System.currentTimeMillis();
 
 		try {
 			Workbook wb = WorkbookFactory.create(file.getInputStream());
@@ -55,7 +48,8 @@ public class UploadController {
                 Table table = new Table();
                 table.setName(wb.getSheetName(i));
 				tables.add(table);
-                Row row = wb.getSheetAt(i).getRow(0);
+                int firstRowNum = wb.getSheetAt(i).getFirstRowNum();
+                Row row = wb.getSheetAt(i).getRow(firstRowNum);
                 List<Column> columns = new ArrayList<Column>();
                 table.setColumns(columns);
                 if (row != null) {
@@ -84,6 +78,16 @@ public class UploadController {
 			e.printStackTrace();
 			model.addAttribute("message","File format not supported.");
 		}
+
+        long timePassed = System.currentTimeMillis() - start;
+        model.addAttribute("timePassed", new Long(timePassed));
+
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        long freeMemory =  Runtime.getRuntime().freeMemory();
+        long usedMemory = totalMemory - freeMemory;
+        model.addAttribute("totalMemory", new Long(totalMemory));
+        model.addAttribute("freeMemory", new Long(freeMemory));
+        model.addAttribute("usedMemory", new Long(usedMemory));
 
         return "poc_select_columns";
 

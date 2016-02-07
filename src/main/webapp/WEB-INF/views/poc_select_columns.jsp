@@ -24,11 +24,12 @@
             <c:if test="${not empty tables}">
                 <c:forEach items="${tables}" var="table">
                     <p>
-                        <input type="checkbox" id="${table.name}" name="${table.name}" style="display:inline" onclick="toggleTable('${table.name}');" />&nbsp;<strong><c:out value="${table.name}" /></strong>
+                        <input type="checkbox" checked id="${table.name}" name="${table.name}" style="display:inline" onclick="toggleTable('${table.name}');" />&nbsp;<strong><c:out value="${table.name}" /></strong>
                         <br/>
                         <c:forEach items="${table.columns}" var="column">
-                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="${table.name}|${column.name}" name="DATA_${table.name}|${column.name}" style="display:inline" />&nbsp;<c:out value="${column.name}" />
-                            <br/>
+                            <div style="padding-left:10px; margin:0px;">
+                                <input type="checkbox" checked id="${table.name}|${column.name}" name="DATA_${table.name}|${column.name}" style="margin-bottom:3px; display:inline" />&nbsp;<c:out value="${column.name}" />
+                            </div>
                         </c:forEach>
                     </p>
                 </c:forEach>
@@ -36,6 +37,16 @@
             <br/>
             <button type="submit">Submit</button>
 		</form>
+		<hr />
+		<br />
+		<small>Server processing time: ${timePassed} ms</small>
+		<br/>
+		<small>Total memory: ${totalMemory}</small>
+		<br/>
+        <small>Free memory: ${freeMemory}</small>
+        <br/>
+        <small>Used memory: ${usedMemory}</small>
+
 
 	</div>
 	<script>

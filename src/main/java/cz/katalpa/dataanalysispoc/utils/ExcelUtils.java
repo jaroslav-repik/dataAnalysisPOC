@@ -44,16 +44,18 @@ public class ExcelUtils {
     public static Column getColumnDetail(Sheet sheet, int columnIndex) {
         Column column = new Column();
         Set values = new HashSet();
-        for (int i = sheet.getFirstRowNum(); i < sheet.getLastRowNum(); i++) {
+        long recordsTotal = 0;
+        for (int i = sheet.getFirstRowNum() + 1; i < sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
             Cell cell = row.getCell(columnIndex);
             String cellValue = getCellValue(cell);
             if (cellValue != null) {
                 values.add(cellValue);
+                recordsTotal ++;
             }
         }
 
-        column.setRecordsTotal(sheet.getLastRowNum() - sheet.getFirstRowNum());
+        column.setRecordsTotal(recordsTotal);
         column.setRecordsUnique(values.size());
 
         return column;

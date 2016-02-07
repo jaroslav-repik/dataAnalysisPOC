@@ -2,18 +2,15 @@ package cz.katalpa.dataanalysispoc.controller;
 
 import cz.katalpa.dataanalysispoc.model.Column;
 import cz.katalpa.dataanalysispoc.model.Table;
-import cz.katalpa.dataanalysispoc.model.Template;
 import cz.katalpa.dataanalysispoc.utils.ExcelUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.springframework.mvc.extensions.ajax.AjaxUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -28,6 +25,8 @@ public class ReportController {
 
 	@RequestMapping(method=RequestMethod.POST)
 	public String createReport(Model model, HttpServletRequest request) throws IOException {
+
+        long start = System.currentTimeMillis();
 
         Map<String, String[]> requestParams = request.getParameterMap();
 
@@ -54,7 +53,8 @@ public class ReportController {
             table.setName(selectedTable);
             List<Column> columns = new ArrayList<Column>();
             Sheet sheet = wb.getSheet(selectedTable);
-            Row row = wb.getSheet(selectedTable).getRow(0);
+            int firstRowNum = wb.getSheet(selectedTable).getFirstRowNum();
+            Row row = wb.getSheet(selectedTable).getRow(firstRowNum);
             if (row != null) {
                 for (int j = row.getFirstCellNum(); j < row.getLastCellNum(); j++) {
                     try {
@@ -82,6 +82,16 @@ public class ReportController {
             }
         }
         model.addAttribute("tables", tables);
+
+        long timePassed = System.currentTimeMillis() - start;
+        model.addAttribute("timePassed", new Long(timePassed));
+
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        long freeMemory =  Runtime.getRuntime().freeMemory();
+        long usedMemory = totalMemory - freeMemory;
+        model.addAttribute("totalMemory", new Long(totalMemory));
+        model.addAttribute("freeMemory", new Long(freeMemory));
+        model.addAttribute("usedMemory", new Long(usedMemory));
 
         return "poc_report";
 
