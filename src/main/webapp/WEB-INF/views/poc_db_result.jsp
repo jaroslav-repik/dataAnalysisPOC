@@ -12,7 +12,7 @@
 </c:if>
 	<div id="selectColumnsDiv">
 		<h1>Data Analysis POC</h1>
-		<h2>Step 3: Data Report</h2>
+		<h2>Step 4: Database Export Result</h2>
 
 		<form action="${contextPath}/export?${_csrf.parameterName}=${_csrf.token}" method="POST" class="cleanform">
 			<div class="header">
@@ -21,19 +21,9 @@
 		  		</c:if>
 			</div>
 
-            <table border="1">
-                <tr><th>Table</th><th>Column</th><th>Records Total</th><th>Records Unique</th></tr>
-                <c:if test="${not empty tables}">
-                    <c:forEach items="${tables}" var="table">
-                        <tr><td>${table.name}</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-                        <c:forEach items="${table.columns}" var="column">
-                            <tr><td>&nbsp;</td><td>${column.name}</td><td>${column.recordsTotal}</td><td>${column.recordsUnique}</td></tr>
-                        </c:forEach>
-                    </c:forEach>
-                </c:if>
-            </table>
-            <br />
-            <button type="submit">Export to DB</button>
+            <c:forEach items="${dbMessages}" var="dbMessage">
+            	<p>${dbMessage}</p>
+            </c:forEach>
 		</form>
 
 	</div>

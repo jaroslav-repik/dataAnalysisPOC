@@ -41,7 +41,7 @@ public class ExcelUtils {
         return cellValue;
     }
 
-    public static Column getColumnDetail(Sheet sheet, int columnIndex) {
+    public static Column getColumnDetail(Sheet sheet, int columnIndex, boolean returnValues) {
         Column column = new Column();
         Set values = new HashSet();
         long recordsTotal = 0;
@@ -57,6 +57,9 @@ public class ExcelUtils {
 
         column.setRecordsTotal(recordsTotal);
         column.setRecordsUnique(values.size());
+        if (returnValues) {
+            column.setValues(values);
+        }
 
         return column;
     }

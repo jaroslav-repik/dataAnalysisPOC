@@ -45,6 +45,10 @@ public class ReportController {
             }
         }
 
+        //save selected tables and columns to session for processing next request
+        request.getSession(false).setAttribute("selectedTables",selectedTables );
+        request.getSession(false).setAttribute("selectedColumns",selectedColumns );
+
         Workbook wb = (Workbook)request.getSession(false).getAttribute("workbook");
 
         List<Table> tables = new ArrayList<Table>();
@@ -66,7 +70,7 @@ public class ReportController {
 
                         if (selectedColumns.contains("DATA_"+selectedTable+"|"+cellValue)) {
                             //column was selected
-                            Column column = ExcelUtils.getColumnDetail(sheet, j);
+                            Column column = ExcelUtils.getColumnDetail(sheet, j, false);
                             column.setName(cellValue);
                             columns.add(column);
                         }
